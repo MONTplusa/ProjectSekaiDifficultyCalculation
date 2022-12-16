@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>プロジェクトセカイ　難易度表</title>
+</head>
+
+<body>
+  <h1>{{.Data.error.StatusCode}} - {{.Data.error.Title}}</h1>
+  <div>
+    現在のアカウント:
+    {{if eq .Username ""}}
+    未ログイン
+    {{else}}
+    {{.Username}}
+    {{end}}
+  </div>
+  <div>
+    {{range .Links}}
+    <a href={{.Url}}>{{.Title}}</a>
+    {{end}}
+  </div>
+  何らかの原因で正常に完了しませんでした。 detail:{{.Data.error.Detail}}
+</body>
+
+</html>

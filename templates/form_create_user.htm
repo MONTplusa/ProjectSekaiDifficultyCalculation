@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>プロジェクトセカイ　難易度表</title>
+</head>
+
+<body>
+  <h1>プロジェクトセカイ　難易度表</h1>
+  <div>
+    現在のアカウント:
+    {{if eq .Username ""}}
+    未ログイン
+    {{else}}
+    {{.Username}}
+    {{end}}
+  </div>
+  <div>
+    {{range .Links}}
+    <a href={{.Url}}>{{.Title}}</a>
+    {{end}}
+  </div>
+  <h2>ユーザーを追加する</h2>
+  <form id="form" action="/create_user" method="POST">
+    <div>
+      <label>ユーザー名:</label>
+      <input type="text" name="Username" id="Username" required />
+    </div>
+    <div>
+      <label>パスワード:</label>
+      <input type="text" name="Password" id="Password" required />
+    </div>
+    <div>
+      <input id="submit-button" value="作成する" type="button" />
+    </div>
+  </form>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script>
+    var $form = $("#form"),
+      $trigger = $("#submit-button"),
+      $iframe = $('iframe[name="sendUser"]');
+
+    $trigger.click(function () {
+      $form.submit();
+      return false;
+    });
+
+    $form.submit(function () { });
+  </script>
+</body>
+
+</html>

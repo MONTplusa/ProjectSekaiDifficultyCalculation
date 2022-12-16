@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>プロジェクトセカイ　難易度表</title>
+</head>
+
+<body>
+    <h1>プロジェクトセカイ　難易度表</h1>
+    <div>
+        現在のアカウント:
+        {{if eq .Username ""}}
+        未ログイン
+        {{else}}
+        {{.Username}}
+        {{end}}
+    </div>
+    <div>
+        {{range .Links}}
+        <a href={{.Url}}>{{.Title}}</a>
+        {{end}}
+    </div>
+    <h2>{{.Title}}</h2>
+    <br>※挑戦回数10回未満のものは挑戦時の調子によって大きく難易度がずれている可能性があります<br>
+    <table>
+        {{range .Data.plates}}
+        <tr>
+            {{if lt .Try 10}}
+            <th>({{.Rate}})</th>
+            {{else}}
+            <th>{{.Rate}}</th>
+            {{end}}
+            <td>{{.DifficultyName}}</td>
+            <td>{{.Level}}</td>
+            <td>{{.Name}}</td>
+            <td>(挑戦回数:{{.Try}})</td>
+        </tr>
+        {{end}}
+    </table>
+
+
+</body>
+
+</html>

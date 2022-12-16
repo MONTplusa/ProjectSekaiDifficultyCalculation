@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>プロジェクトセカイ　難易度表</title>
+</head>
+
+<body>
+  <h1>プロジェクトセカイ　難易度表</h1>
+  <div>
+    現在のアカウント:
+    {{if eq .Username ""}}
+    未ログイン
+    {{else}}
+    {{.Username}}
+    {{end}}
+  </div>
+  <div>
+    {{range .Links}}
+    <a href={{.Url}}>{{.Title}}</a>
+    {{end}}
+  </div>
+  <h2>プレイ結果を追加する</h2>
+  <form id="form" action="/add" method="POST" target="sendPlay">
+    <table>
+      <tr>
+        <th>Song:</th>
+        <td><input type="text" name="Song" id="form-song" list=songs placeholder="曲名を入力してください" required /></td>
+        <datalist id="songs">
+          {{range .Data.songnames}}
+          <option value="{{.}}">
+            {{end}}
+        </datalist>
+      </tr>
+      <tr>
+        <th>PERFECT:</th>
+        <td><input type="number" name="PERFECT" id="PERFECT" required /></td>
+      </tr>
+      <tr>
+        <th>GREAT:</th>
+        <td><input type="number" name="GREAT" id="GREAT" required /></td>
+      </tr>
+      <tr>
+        <th>GOOD:</th>
+        <td><input type="number" name="GOOD" id="GOOD" required /></td>
+      </tr>
+      <tr>
+        <th>BAD:</th>
+        <td><input type="number" name="BAD" id="BAD" required /></td>
+      </tr>
+      <tr>
+        <th>MISS:</th>
+        <td><input type="number" name="MISS" id="MISS" required /></td>
+      </tr>
+    </table>
+    <div>
+      <input type="radio" name="Cleared" id="Cleared" value="1" checked>Live Cleared</input>
+      <input type="radio" name="Cleared" id="Cleared" value="0">Failed</input>
+    </div>
+    <div>
+      <input type="radio" name="Difficulty" id="Difficulty" value="0">EASY</input>
+      <input type="radio" name="Difficulty" id="Difficulty" value="1">NORMAL</input>
+      <input type="radio" name="Difficulty" id="Difficulty" value="2">HARD</input>
+      <input type="radio" name="Difficulty" id="Difficulty" value="3">EXPERT</input>
+      <input type="radio" name="Difficulty" id="Difficulty" value="4" checked>MASTER</input>
+    </div>
+    <div>
+      <input id="submit-button" value="送信する" type="button" />
+    </div>
+  </form>
+  <iframe name="sendPlay" style="width: 0px; height: 0px; border: 0px"></iframe>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script>
+    var $form = $("#form"),
+      $trigger = $("#submit-button"),
+      $iframe = $('iframe[name="sendPlay"]');
+    var last = "no submittion"
+    $trigger.click(function () {
+      if (last == $("#form").serialize()) {
+        if (!confirm('確認:前回追加したものと同じ内容が入っていますが、本当によろしいですか？')) {
+          return false;
+        } else {
+        }
+      }
+      $form.submit();
+      return false;
+    });
+
+    $form.submit(function () {
+      $.ajax({
+        url: $('#form').attr('action'),
+        type: 'POST',
+        data: $('#form').serialize()
+      })
+        .done(function () {
+          alert('プレイデータが追加されました。');
+          last = $("#form").serialize()
+        })
+        .fail(function (XMLHttpRequest, textStatus, errorThrown) {
+          alert('プレイデータの追加に失敗しました。以下を確認して下さい。\n・曲の名前が違う（正式な形でない）\n・プレイ結果があっていない\n・難易度、Clearedが違う');
+          console.log("XMLHttpRequest : " + XMLHttpRequest.status);
+          console.log("textStatus     : " + textStatus);
+          console.log("errorThrown    : " + errorThrown.message);
+        })
+      return false
+    })
+  </script>
+</body>
+
+</html>
